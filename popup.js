@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Version Check & Up-to-Date Indicator ---
   const GITHUB_VERSION_JS_URL = 'https://raw.githubusercontent.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/main/version.js';
-  const GITHUB_DOWNLOAD_URL = 'https://github.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/archive/refs/tags/Stable.zip';
+  const GITHUB_DOWNLOAD_URL = 'https://github.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/releases/latest';
 
   function compareVersions(current, latest) {
     const v1 = current.split('.').map(Number);
