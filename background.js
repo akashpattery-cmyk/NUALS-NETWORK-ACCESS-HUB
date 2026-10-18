@@ -1,7 +1,7 @@
 // MUST use raw.githubusercontent.com, NOT github.com
 const GITHUB_VERSION_JS_URL = 'https://raw.githubusercontent.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/main/version.js';
 // Link to your GitHub Releases page or direct .zip download
-const GITHUB_DOWNLOAD_URL = 'https://github.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/archive/refs/tags/Stable.zip';
+const GITHUB_DOWNLOAD_URL = 'https://github.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/releases/latest';
 
 // Helper to compare semantic versions (e.g., "1.0.0" vs "1.1.0")
 function isNewerVersion(current, latest) {
