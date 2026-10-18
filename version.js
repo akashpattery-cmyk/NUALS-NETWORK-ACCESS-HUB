@@ -1,3 +1,3 @@
 // version.js hosted on GitHub
-const EXTENSION_VERSION = "1.2.0";
+const EXTENSION_VERSION = "1.3";
 export default EXTENSION_VERSION;
