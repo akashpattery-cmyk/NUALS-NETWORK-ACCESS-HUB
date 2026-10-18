@@ -5,7 +5,7 @@ Installation Guide
 
 Step 1: Download and Extract the Folder
 
-Download the extension file provided to you.
+Download the extension file provided to you via https://github.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/releases/latest
 It is a .zip file that you need to extract (unzip). Right-click the file and select Extract All... (on Windows) or double-click it (on Mac).
 Save the extracted folder somewhere easy to find. Note: Make sure this file is never deleted from this location.
 
