@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @font-face {
+      font-family: 'Lexend Deca';
+      src: url('lexend-deca.ttf') format('truetype');
+    }
+
+    :root {
+      --crimson: #8a0b0b; 
+      --crimson-hover: #630505;
+      --bg-color: #ffffff;
+      --text-color: #333;
+    }
+    
+    body { 
+      font-family: 'Lexend Deca', sans-serif;
+      width: 280px; 
+      padding: 18px; 
+      margin: 0; 
+      background: var(--bg-color);
+      text-align: center;
+      transition: width 0.25s ease;
+      
+      /* Thick square crimson border */
+      border: 4px solid var(--crimson);
+      border-radius: 0px;
+      box-sizing: border-box;
+      box-shadow: 4px 4px 0px rgba(138, 11, 11, 0.2);
+    }
+
+    body.pdf-mode {
+      width: 550px;
+      padding: 12px;
+    }
+    
+    .header {
+      display: flex;
+      flex-direction: column; 
+      align-items: center;
+      justify-content: center;
+      gap: 6px; 
+      margin-bottom: 16px;
+      border-bottom: 2px solid #eaeaea; 
+      padding-bottom: 12px;
+    }
+    .nuals-logo-text {
+      margin: 0;
+      color: var(--crimson);
+      font-size: 22px; 
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+    h3 { 
+      margin: 0; 
+      color: var(--text-color); 
+      font-size: 13px; 
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+    
+    #form-view { display: block; }
+    #disclaimer-view { display: none; flex-direction: column; align-items: center; }
+    #success-view { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; }
+    #pdf-view { display: none; flex-direction: column; align-items: center; width: 100%; }
+    
+    .input-group {
+      text-align: left;
+      margin-bottom: 12px;
+    }
+    label { 
+      font-size: 12px; 
+      font-weight: 700; 
+      color: var(--text-color); 
+      display: block;
+      margin-bottom: 5px;
+    }
+    input { 
+      width: 100%; 
+      padding: 9px 10px; 
+      box-sizing: border-box; 
+      border: 2px solid #ddd; 
+      border-radius: 0px;     
+      font-size: 13px; 
+      font-family: 'Lexend Deca', sans-serif;
+      transition: all 0.2s ease;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--crimson);
+      box-shadow: 0 0 0 2px rgba(138, 11, 11, 0.1);
+    }
+
+    .error-msg {
+      color: #d32f2f;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: -4px;
+      margin-bottom: 8px;
+      display: none;
+    }
+    
+    .disclaimer-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-color);
+      margin: 0 0 10px 0;
+    }
+    .disclaimer-box {
+      width: 100%;
+      height: 160px;
+      overflow-y: auto;
+      text-align: left;
+      font-size: 10px;
+      line-height: 1.4;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 0px;
+      background: #fafafa;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    .disclaimer-box p { margin: 0 0 8px 0; }
+    .disclaimer-box ul { margin: 0 0 8px 0; padding-left: 15px; }
+    .disclaimer-box strong { color: #333; }
+    
+    .main-btn { 
+      width: 100%; 
+      padding: 11px; 
+      background: var(--crimson); 
+      color: white; 
+      font-size: 13px; 
+      font-weight: 700;
+      font-family: 'Lexend Deca', sans-serif;
+      border: none; 
+      border-radius: 0px; 
+      cursor: pointer; 
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 4px;
+    }
+    .main-btn:hover { background: var(--crimson-hover); }
+    .main-btn:active { transform: scale(0.97); }
+    
+    .secondary-btn {
+      background: #eee;
+      color: #333;
+      margin-top: 8px;
+    }
+    .secondary-btn:hover { background: #ddd; }
+    
+    .big-tick {
+      width: 52px; 
+      height: 52px;
+      background: #2e7d32;
+      color: white;
+      border-radius: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 12px;
+      box-shadow: 2px 2px 0px rgba(46, 125, 50, 0.3);
+    }
+    .success-text {
+      font-size: 17px; 
+      font-weight: 700;
+      color: var(--text-color);
+      margin: 0 0 4px 0;
+    }
+    .success-subtext {
+      font-size: 12px; 
+      color: #666;
+      margin: 0 0 6px 0;
+    }
+
+    .pdf-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+    .pdf-toolbar button {
+      margin: 0;
+      padding: 7px 12px;
+      font-size: 12px;
+      width: auto;
+    }
+    .pdf-frame {
+      width: 100%;
+      height: 420px;
+      border: 1.5px solid #ddd;
+      border-radius: 0px;
+      background: #525659;
+    }
+
+    .portals-divider {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 2px solid #eaeaea;
+    }
+    .portals-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #777;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin: 0 0 10px 0;
+    }
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .portal-card-wrapper {
+      position: relative;
+    }
+    .portal-btn {
+      width: 100%;
+      background: #fdfdfd;
+      border: 1.5px solid #e2e2e2;
+      border-radius: 0px;
+      padding: 10px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      font-family: 'Lexend Deca', sans-serif;
+      transition: all 0.2s ease;
+    }
+    .portal-btn:hover {
+      background: #fff5f5;
+      border-color: var(--crimson);
+      transform: translateY(-2px);
+      box-shadow: 2px 2px 0px rgba(138, 11, 11, 0.08);
+    }
+    .portal-btn:active { transform: scale(0.96); }
+    .portal-btn img, .portal-btn svg {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      border-radius: 0px;
+    }
+    .portal-btn span {
+      font-size: 10px;
+      font-weight: 700;
+      color: #333;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    /* 100% Opacity Solid Black Tooltip with White Text for Locked Buttons */
+    .portal-btn.locked {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(80%);
+      pointer-events: auto !important; 
+    }
+  
+    .lock-banner {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 8px;
+      margin-bottom: 10px;
+      border-radius: 0px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="main-header" class="header">
+    <h2 class="nuals-logo-text">NUALS</h2>
+    <h3>Network Access Hub</h3>
+  </div>
+  
+  <div id="form-view">
+    <div class="input-group">
+      <label>WI-FI User ID</label>
+      <input type="text" id="username" placeholder="Enter ID">
+    </div>
+    
+    <div class="input-group">
+      <label>NUALS Email</label>
+      <input type="email" id="scc-email-input" placeholder="Enter NUALS Email">
+    </div>
+
+    <div class="input-group">
+      <label>WI-FI Password</label>
+      <input type="password" id="password" placeholder="Enter Password">
+    </div>
+    
+    <div id="error-msg" class="error-msg">Enter valid credentials</div>
+    <button id="proceed-btn" class="main-btn">Save Credentials</button>
+  </div>
+
+  <div id="disclaimer-view">
+    <p class="disclaimer-title">LEGAL DISCLAIMER AND TERMS OF USE</p>
+    <div class="disclaimer-box">
+      <p><strong>1. Source-Available & Non-Commercial License</strong><br>
+      The source code for the "NUALS Wi-Fi & Legal Portal Hub" browser extension (hereinafter referred to as the "Software") is provided under a source-available, non-commercial framework. Permission is hereby granted, free of charge, to any person obtaining a copy of this Software, to view, use, copy, modify, and distribute the Software, subject to the following strict conditions:</p>
+      <ul>
+        <li><strong>No Commercial Use or Sale:</strong> The Software, in whole or in part, along with any modified or derivative works, may strictly NOT be sold, licensed, sublicensed, leased, or otherwise monetised in any capacity.</li>
+        <li><strong>Attribution & Share-Alike:</strong> Any redistributed copies or modified derivative works must retain this original legal notice, provide attribution to the original developer, and be distributed freely under these exact same non-commercial terms.</li>
+      </ul>
+
+      <p><strong>2. No Official Affiliation</strong><br>
+      The Software is an independent, third-party productivity application developed solely for personal convenience. It is not affiliated with, authorised, maintained, sponsored, or endorsed by the National University of Advanced Legal Studies (NUALS), Manupatra, SCC Online, or any associated institutional IT departments and network administrators.</p>
+
+      <p><strong>3. Trademark Notice</strong><br>
+      The "NUALS", "Manupatra", and "SCC Online" names, logos, and any related trademarks utilised within the graphical interface or quick-launch features of the Software remain the exclusive property of their respective rightsholders and are used solely for localised aesthetic, identification, and navigation purposes. No claim of ownership or official license over these trademarks is made or implied.</p>
+
+      <p><strong>4. Third-Party Legal Portals & Automated Logins</strong><br>
+      The Software includes quick-launch tools and automated script integrations for third-party legal databases (including Manupatra IP login and SCC Online access).</p>
+      <ul>
+        <li>You acknowledge that your access to these platforms is governed by their respective individual terms of service, institutional subscription agreements, and acceptable use policies.</li>
+        <li>The developer assumes no responsibility or liability for access restrictions, IP-authentication failures, or subscription lockouts enforced by third-party publishers.</li>
+      </ul>
+
+      <p><strong>5. Disclaimer of Warranties</strong><br>
+      THE SOFTWARE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, THE DEVELOPER EXPRESSLY DISCLAIMS ALL WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. THE DEVELOPER DOES NOT WARRANT THAT THE SOFTWARE WILL FUNCTION UNINTERRUPTED, BE ERROR-FREE, OR REMAIN COMPATIBLE WITH FUTURE UPDATES TO UNIVERSITY NETWORKS, CAPTIVE PORTALS, OR THIRD-PARTY LEGAL WEBSITES.</p>
+
+      <p><strong>6. Limitation of Liability</strong><br>
+      Under no circumstances, including but not limited to negligence, shall the developer be liable for any direct, indirect, incidental, special, exemplary, or consequential damages arising out of or in connection with the use of, or inability to use, the Software. This absolute limitation of liability includes, but is not limited to:</p>
+      <ul>
+        <li><strong>Account Sanctions:</strong> Any account lockouts, network bans, IP restrictions, throttling, or disciplinary actions taken by network or institutional administrators due to the use of automated login scripts or rapid consecutive authentication attempts.</li>
+        <li><strong>Security & Credential Data:</strong> Any loss, exposure, or compromise of network or database credentials (including Wi-Fi IDs, passwords, and SCC account emails), which the Software stores locally within the browser's storage environment.</li>
+        <li><strong>Network Connectivity & Access:</strong> Any loss of productivity, legal research data, or internet access resulting from the Software's failure to successfully authenticate or navigate the user.</li>
+      </ul>
+
+      <p><strong>7. User Responsibility and Compliance</strong><br>
+      You assume all risks associated with the use of the Software. It is solely your responsibility to ensure that your use of automated authentication scripts and embedded documents complies with the current Acceptable Use Policies (AUP), IP access guidelines, and IT regulations of your university and respective legal resource providers.</p>
+    </div>
+    <button id="accept-btn" class="main-btn">I Accept</button>
+    <button id="cancel-btn" class="main-btn secondary-btn">Cancel</button>
+  </div>
+
+  <div id="success-view">
+    <div class="big-tick">&#10004;</div>
+    <p class="success-text">Saved!</p>
+    <p class="success-subtext">Login credentials saved.</p>
+    <button id="back-btn" class="main-btn secondary-btn">Edit Credentials</button>
+  </div>
+
+  <div id="pdf-view">
+    <div class="pdf-toolbar">
+      <button id="close-pdf-btn" class="main-btn secondary-btn">&#8592; Back</button>
+      <span style="font-size: 12px; font-weight: 700; color: var(--crimson);">PDF Viewer</span>
+    </div>
+    <embed id="pdf-embed" src="document.pdf#toolbar=0&navpanes=0&scrollbar=1" type="application/pdf" class="pdf-frame">
+  </div>
+
+  <div id="quick-launch-section" class="portals-divider">
+    <div id="lock-banner" class="lock-banner">Enter credentials to access!</div>
+    <p class="portals-label">Quick Launch</p>
+    <div class="portal-grid">
+      <!-- 1. Manupatra -->
+      <div class="portal-card-wrapper">
+        <button id="manupatra-btn" class="portal-btn locked" title="Auto-Login to Manupatra">
+          <img src="manupatra_icon.png" alt="Manupatra">
+          <span>Manupatra</span>
+        </button>
+      </div>
+
+      <!-- 2. SCC Online -->
+      <div class="portal-card-wrapper">
+        <button id="scc-btn" class="portal-btn locked" title="Auto-Login to SCC Online">
+          <img src="scc_icon.png" alt="SCC Online">
+          <span>SCC Online</span>
+        </button>
+      </div>
+
+      <!-- 3. Embedded PDF -->
+      <div class="portal-card-wrapper">
+        <button id="pdf-btn" class="portal-btn locked" title="View Library Guide">
+          <img src="pdf_icon.png" alt="PDF">
+          <span>Library Guide</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. OPAC External Button -->
+  <button id="visit-web-btn" class="portal-btn locked" style="margin-top: 12px;">NUALS OPAC ↗</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>

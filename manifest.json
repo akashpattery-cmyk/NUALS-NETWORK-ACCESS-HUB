@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "NUALS Network Access Hub",
+  "version": "1.2",
+"background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "notifications",
+    "alarms"
+  "description": "Auto-login for NUALS Wi-Fi, Manupatra IP, and SCC Online.",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "permissions": [
+    "storage"
+  ],
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://192.168.10.10/connect/PortalMain/*",
+        "https://192.168.10.10/connect/PortalMain?/*"
+      ],
+      "js": ["wifi_content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.manupatrafast.com/*"],
+      "js": ["manupatra_content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["*://*.scconline.com/*"],
+      "js": ["scc_content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
