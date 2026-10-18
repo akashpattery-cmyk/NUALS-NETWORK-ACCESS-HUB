@@ -130,4 +130,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+// --- Version Check & Up-to-Date Indicator ---
+  const GITHUB_VERSION_JS_URL = 'https://raw.githubusercontent.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/main/version.js';
+  const GITHUB_DOWNLOAD_URL = 'https://github.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/archive/refs/tags/Stable.zip';
+
+  function compareVersions(current, latest) {
+    const v1 = current.split('.').map(Number);
+    const v2 = latest.split('.').map(Number);
+    for (let i = 0; i < Math.max(v1.length, v2.length); i++) {
+      const num1 = v1[i] || 0;
+      const num2 = v2[i] || 0;
+      if (num2 > num1) return true;
+      if (num2 < num1) return false;
+    }
+    return false;
+  }
+
+  async function checkAppVersion() {
+    const badge = document.getElementById('version-status');
+    const badgeText = document.getElementById('version-text');
+    const localVersion = chrome.runtime.getManifest().version;
+
+    try {
+      const response = await fetch(GITHUB_VERSION_JS_URL, { cache: 'no-store' });
+      if (!response.ok) throw new Error('Network response failed');
+      
+      const jsText = await response.text();
+      const versionMatch = jsText.match(/\b(\d+\.\d+(?:\.\d+)?)\b/);
+
+      if (versionMatch && compareVersions(localVersion, versionMatch[1])) {
+        // Newer version exists
+        badge.className = 'version-badge update-available';
+        badgeText.textContent = `Update available (v${versionMatch[1]}) ↗`;
+        badge.title = 'Click to open download page';
+        badge.onclick = () => chrome.tabs.create({ url: GITHUB_DOWNLOAD_URL });
+      } else {
+        // Current version is equal to or newer than GitHub
+        badge.className = 'version-badge up-to-date';
+        badgeText.textContent = `Up to date (v${localVersion})`;
+        badge.title = 'Extension is running the latest version';
+        badge.onclick = null;
+      }
+    } catch (err) {
+      // Graceful fallback if offline or raw GitHub is unreachable
+      badge.className = 'version-badge up-to-date';
+      badgeText.textContent = `v${localVersion}`;
+      badge.title = 'Could not reach server to check for updates';
+    }
+  }
+
+  checkAppVersion();
+
 });

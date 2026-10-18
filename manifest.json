@@ -2,12 +2,9 @@
   "manifest_version": 3,
   "name": "NUALS Network Access Hub",
   "version": "1.2",
-"background": {
+  "background": {
     "service_worker": "background.js"
   },
-  "permissions": [
-    "notifications",
-    "alarms"
   "description": "Auto-login for NUALS Wi-Fi, Manupatra IP, and SCC Online.",
   "icons": {
     "16": "icon.png",
@@ -23,6 +20,8 @@
     }
   },
   "permissions": [
+    "notifications",
+    "alarms",
     "storage"
   ],
   "options_page": "options.html",
