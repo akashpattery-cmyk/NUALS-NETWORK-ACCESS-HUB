@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (result.wifiUsername && result.wifiPassword) {
       credentialsSaved = true;
+      document.getElementById('form-view').style.display = 'none';
+      document.getElementById('active-view').style.display = 'flex';
       unlockQuickLaunches();
     } else {
       lockQuickLaunches(); 
@@ -67,10 +69,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Step 4: Click "Edit Credentials" -> Go back to Form
+  // Step 4: Click "Continue" on Success View -> Go to Active View
   document.getElementById('back-btn').addEventListener('click', () => {
     document.getElementById('success-view').style.display = 'none';
+    document.getElementById('active-view').style.display = 'flex';
+  });
+
+  // Step 5: Click "Edit Credentials" from Active View -> Go back to Form
+  document.getElementById('edit-btn').addEventListener('click', () => {
+    document.getElementById('active-view').style.display = 'none';
     document.getElementById('form-view').style.display = 'block';
+  });
+
+  // Step 6: Click "Delete Credentials" from Active View -> Clear Storage & Go to Form
+  document.getElementById('delete-btn').addEventListener('click', () => {
+    chrome.storage.local.remove(['wifiUsername', 'wifiPassword', 'sccEmail'], () => {
+      credentialsSaved = false;
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('scc-email-input').value = '';
+      document.getElementById('active-view').style.display = 'none';
+      document.getElementById('form-view').style.display = 'block';
+      lockQuickLaunches();
+    });
   });
 
   // Helper function to check lock before executing actions
@@ -85,14 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
     actionCallback();
   }
 
-  // Quick Launch 1: Open Manupatra[cite: 8]
+  // Quick Launch 1: Open Manupatra
   document.getElementById('manupatra-btn').addEventListener('click', () => {
     guardAction(() => {
       chrome.tabs.create({ url: "https://www.manupatrafast.com/homepopup.aspx" });
     });
   });
 
-  // Quick Launch 2: Open SCC Online[cite: 12]
+  // Quick Launch 2: Open SCC Online
   document.getElementById('scc-btn').addEventListener('click', () => {
     guardAction(() => {
       chrome.tabs.create({ url: "https://www.scconline.com" });
@@ -105,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.add('pdf-mode');
       document.getElementById('main-header').style.display = 'none';
       document.getElementById('form-view').style.display = 'none';
+      document.getElementById('active-view').style.display = 'none';
       document.getElementById('disclaimer-view').style.display = 'none';
       document.getElementById('success-view').style.display = 'none';
       document.getElementById('quick-launch-section').style.display = 'none';
@@ -117,7 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.remove('pdf-mode');
     document.getElementById('pdf-view').style.display = 'none';
     document.getElementById('main-header').style.display = 'flex';
-    document.getElementById('form-view').style.display = 'block';
+    // Decide which view to show based on credential status
+    if (credentialsSaved) {
+      document.getElementById('active-view').style.display = 'flex';
+    } else {
+      document.getElementById('form-view').style.display = 'block';
+    }
     document.getElementById('quick-launch-section').style.display = 'block';
   });
 
@@ -130,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-// --- Version Check & Up-to-Date Indicator ---
+  // --- Version Check & Up-to-Date Indicator ---
   const GITHUB_VERSION_JS_URL = 'https://raw.githubusercontent.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/main/version.js';
   const GITHUB_DOWNLOAD_URL = 'https://github.com/akashpattery-cmyk/NUALS-NETWORK-ACCESS-HUB/releases/latest';
 

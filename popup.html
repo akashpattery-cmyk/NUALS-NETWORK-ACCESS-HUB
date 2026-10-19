@@ -63,11 +63,12 @@
     }
     
     #form-view { display: block; }
+    #active-view { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; }
     #disclaimer-view { display: none; flex-direction: column; align-items: center; }
     #success-view { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0; }
     #pdf-view { display: none; flex-direction: column; align-items: center; width: 100%; }
     
-.version-badge {
+    .version-badge {
       display: inline-flex;
       align-items: center;
       gap: 5px;
@@ -300,7 +301,6 @@
       max-width: 100%;
     }
 
-    /* 100% Opacity Solid Black Tooltip with White Text for Locked Buttons */
     .portal-btn.locked {
       opacity: 0.4;
       cursor: not-allowed;
@@ -351,6 +351,14 @@
     <button id="proceed-btn" class="main-btn">Save Credentials</button>
   </div>
 
+  <div id="active-view">
+    <div class="big-tick" style="background: var(--crimson);">&#10003;</div>
+    <p class="success-text">Extension Active</p>
+    <p class="success-subtext">Your credentials are saved securely.</p>
+    <button id="edit-btn" class="main-btn">Edit Credentials</button>
+    <button id="delete-btn" class="main-btn secondary-btn" style="color: #d32f2f;">Delete Credentials</button>
+  </div>
+
   <div id="disclaimer-view">
     <p class="disclaimer-title">LEGAL DISCLAIMER AND TERMS OF USE</p>
     <div class="disclaimer-box">
@@ -396,7 +404,7 @@
     <div class="big-tick">&#10004;</div>
     <p class="success-text">Saved!</p>
     <p class="success-subtext">Login credentials saved.</p>
-    <button id="back-btn" class="main-btn secondary-btn">Edit Credentials</button>
+    <button id="back-btn" class="main-btn secondary-btn">Continue</button>
   </div>
 
   <div id="pdf-view">
