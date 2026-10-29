@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMsg = document.getElementById('error-msg');
 
     const isValidUser = /^\d{4}$/.test(user);
-    const isValidPass = /^\d{5}$/.test(pass);
+    const isValidPass = /^\d{6}$/.test(pass);
 
     if (isValidUser && isValidPass) {
       errorMsg.style.display = 'none';
